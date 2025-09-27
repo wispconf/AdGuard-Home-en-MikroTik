@@ -151,9 +151,7 @@ En este escenario, AdGuard Home no puede ver la IP real del cliente (como `10.5.
 
 ---
 
-## 14. ✅ Puntos que reforzar
+## 📘 Nota importante
 
-- Buscar una forma en la que el cliente acceda directamente al DNS sin pasar por `172.17.0.1`, ya sea:
-  - Con alguna modificación en el contenedor
-  - Colocando `veth1` directamente en el `bridgeLan`
-
+    Si AdGuard está dentro del contenedor de MikroTik, los clientes seguirán apareciendo como 172.17.0.1 en el dashboard (limitación estructural).
+    Si AdGuard está en un dispositivo con IP directa en la LAN (ej. 10.5.50.5), entonces sí verás las IPs reales de cada cliente en AdGuard Home.
