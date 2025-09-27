@@ -2,7 +2,6 @@
 
 Este tutorial documenta la instalación de AdGuard Home como contenedor en MikroTik RB5009, con redirección DNS para clientes LAN y visibilidad estructurada. Incluye aclaraciones sobre limitaciones de visibilidad por cliente y recomendaciones para trazabilidad completa.
 
----
 
 ## 1. Infraestructura de red base para clientes
 
@@ -14,7 +13,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 /ip/dhcp-server/network/add address=10.5.50.0/24 gateway=10.5.50.254 dns-server=172.17.0.2 comment="Entregar DNS de AdGuard directamente a clientes"
 ```
 
----
 
 ## 2. Red interna para el contenedor
 
@@ -25,15 +23,12 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 /interface/bridge/port/add bridge=containers interface=veth1 comment="Vincular veth1 al bridge de contenedores"
 ```
 
----
-
 ## 3. Configurar parámetros globales de contenedores
 
 ```bash
 /container/config/set registry-url=https://registry-1.docker.io tmp-dir=/adguard/tmp
 ```
 
----
 
 ## 4. Crear el contenedor AdGuard Home
 
@@ -46,7 +41,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
   remote-image=adguard/adguardhome:latest
 ```
 
----
 
 ## 5. Activar manualmente el contenedor
 
@@ -62,7 +56,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 /container/set 0 start-on-boot=yes
 ```
 
----
 
 ## 7. Reglas de firewall y NAT
 
@@ -86,7 +79,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
   comment="Permitir salida a Internet desde contenedor"
 ```
 
----
 
 ## 8. Verificación de conectividad
 
@@ -96,7 +88,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 /tool/ping 172.17.0.2
 ```
 
----
 
 ## 9. Acceder a la interfaz web de AdGuard Home
 
@@ -108,8 +99,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
   - Interfaz de escucha: `172.17.0.2`, puerto `53`
   - Web interface: `172.17.0.2:3000`
   - Usuario y contraseña
-
----
 
 ## 10. Configurar proveedores DNS en AdGuard Home
 
@@ -124,15 +113,12 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 9.9.9.9
 ```
 
----
 
 ## 11. Desactivar resolución DNS en MikroTik
 
 ```bash
 /ip/dns/set servers=172.17.0.2 allow-remote-requests=no cache-size=2048KiB query-server-timeout=2s
 ```
-
----
 
 ## 12. Verificación en AdGuard Home
 
@@ -141,7 +127,6 @@ Este tutorial documenta la instalación de AdGuard Home como contenedor en Mikro
 
 - Si todo está correctamente configurado, deberías ver IPs como `10.5.50.x`
 
----
 
 ## 13. ⚠️ Limitación estructural de visibilidad por cliente
 
@@ -149,10 +134,7 @@ Cuando AdGuard Home se ejecuta como contenedor en MikroTik, las peticiones DNS l
 Esto se debe a cómo MikroTik encapsula el tráfico en su sistema de contenedores.  
 En este escenario, AdGuard Home no puede ver la IP real del cliente (como `10.5.50.252` o `10.5.50.247`) porque el tráfico pasa por el router antes de llegar al contenedor.
 
----
 
 ## 📘 Nota importante
-
-    Si AdGuard está dentro del contenedor de MikroTik, los clientes seguirán apareciendo como 172.17.0.1 en el dashboard (limitación estructural).
-    Si AdGuard está en un dispositivo con IP directa en la LAN (ej. 10.5.50.5), entonces sí verás las IPs reales de cada cliente en AdGuard Home.
----
+Si AdGuard está dentro del contenedor de MikroTik, los clientes seguirán apareciendo como 172.17.0.1 en el dashboard (limitación estructural).
+Si AdGuard está en un dispositivo con IP directa en la LAN (ej. 10.5.50.5), entonces sí verás las IPs reales de cada cliente en AdGuard Home.
